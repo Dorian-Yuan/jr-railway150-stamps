@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MY JAPAN RAILWAY 150th ・ 駅スタンプ</title>
+<meta name="description" content="JR站点印章归档">
+<link rel="icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<style>
+  :root{
+    --paper:#f4f1e8;
+    --ink:#161513;
+    --ink-2:#5d5a52;
+    --line:#d6cfbd;
+    --accent:#161513;
+    --accent-2:#3d3b37;
+    --accent-soft:#e6e1d5;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    font-size:15px;line-height:1.5;padding-bottom:env(safe-area-inset-bottom);
+  }
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:30;background:rgba(244,241,232,.96);
+    -webkit-backdrop-filter:saturate(1.6) blur(10px);backdrop-filter:saturate(1.6) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .hrow{display:flex;align-items:center;gap:9px;padding:10px 14px 8px}
+  .logo{width:36px;height:36px;flex:none;display:block}
+  .tt{flex:1;min-width:0}
+  h1{font-size:13px;margin:0;letter-spacing:.01em;font-weight:700;line-height:1.3}
+  .sub{font-size:11px;color:var(--ink-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .langs{display:flex;gap:4px;flex:none}
+  .langs button{
+    font:inherit;font-size:11px;padding:4px 7px;border:1px solid var(--line);
+    background:#fff;color:var(--ink-2);border-radius:7px;cursor:pointer
+  }
+  .langs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .prog{display:flex;align-items:center;gap:8px;padding:0 14px 9px}
+  .progbar{flex:1;height:5px;border-radius:3px;background:#e3ddcd;overflow:hidden}
+  .progbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+  .progtext{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  /* ---------- tabs ---------- */
+  nav.tabs{display:flex;gap:2px;padding:0 10px;background:rgba(244,241,232,.96);border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:29}
+  nav.tabs button{
+    font:inherit;font-size:13px;font-weight:600;color:var(--ink-2);background:none;border:0;
+    padding:9px 14px 8px;border-bottom:2px solid transparent;cursor:pointer;flex:1
+  }
+  nav.tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+  /* ---------- panes ---------- */
+  main{padding:12px 12px 48px}
+  section[hidden]{display:none}
+  .tools{display:flex;gap:8px;margin-bottom:8px}
+  input[type=search]{
+    flex:1;min-width:0;font-size:14px;padding:9px 11px;border:1px solid var(--line);
+    border-radius:9px;background:#fff;color:var(--ink);font-family:inherit
+  }
+  input[type=search]:focus{outline:2px solid rgba(22,21,19,.28);outline-offset:-1px}
+  .btn{font:inherit;font-size:13px;font-weight:600;padding:9px 13px;border-radius:9px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.ghost{color:var(--ink-2)}
+  .stat{font-size:11px;color:var(--ink-2);padding:2px 0 10px}
+  .regions{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+  .regions::-webkit-scrollbar{display:none}
+  .regions button{font:inherit;font-size:12px;padding:5px 11px;border-radius:15px;
+    border:1px solid var(--line);background:#fff;color:var(--ink-2);white-space:nowrap;cursor:pointer}
+  .regions button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:7px 6px 8px;text-align:center;cursor:pointer;position:relative;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    content-visibility:auto;contain-intrinsic-size:150px
+  }
+  .card figure{margin:0;width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;overflow:hidden}
+  .card img{width:100%;height:100%;object-fit:contain;display:block}
+  .card .nm{font-size:12px;font-weight:600;line-height:1.25;
+    overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+  .card.mine{border-color:#cfc9ba}
+  .dot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 2px #fff}
+  .sentinel{height:40px}
+  .empty{color:var(--ink-2);font-size:13px;padding:36px 16px;text-align:center;line-height:1.8}
+  .empty .big{font-size:15px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px}
+  /* ---------- stats ---------- */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+  .panel h3{margin:0 0 12px;font-size:13px;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase;font-weight:700}
+  .bigrow{display:flex;align-items:baseline;gap:8px}
+  .bignum{font-size:34px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+  .bigsub{font-size:13px;color:var(--ink-2)}
+  .meter{height:8px;border-radius:4px;background:#e3ddcd;overflow:hidden;margin:14px 0 6px}
+  .meter i{display:block;height:100%;background:var(--accent)}
+  .dist{display:flex;flex-direction:column;gap:8px}
+  .drow{display:flex;align-items:center;gap:10px;font-size:12px}
+  .drow .k{width:64px;color:var(--ink-2)}
+  .drow .bar{flex:1;height:9px;border-radius:5px;background:#f0ece0;overflow:hidden}
+  .drow .bar i{display:block;height:100%;background:var(--accent-2);opacity:.9}
+  .drow .v{width:58px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  .recent{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
+  .recent figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:9px;padding:3px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+  .recent img{width:100%;height:100%;object-fit:contain}
+  /* ---------- modal ---------- */
+  .mask{position:fixed;inset:0;background:rgba(20,18,14,.62);display:none;z-index:50;
+    align-items:center;justify-content:center;padding:6px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  .mask.on{display:flex}
+  .sheet{
+    background:var(--paper);width:100%;max-width:600px;max-height:96vh;overflow:auto;
+    border-radius:14px;padding:8px 8px 16px;position:relative;box-shadow:0 18px 50px rgba(0,0,0,.35)
+  }
+  .close{position:absolute;top:4px;right:4px;width:34px;height:34px;padding:0;border:0;background:none;
+    font-size:22px;line-height:1;cursor:pointer;color:var(--ink-2);z-index:2}
+  .paper{
+    position:relative;margin:0;background:#fff;border:1px solid var(--line);border-radius:10px;
+    aspect-ratio:1/1;overflow:hidden;
+    touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:pointer
+  }
+  .paper img{max-width:none}
+  .guide{position:absolute;left:50%;top:50%;width:81.6%;aspect-ratio:1/1;
+    transform:translate(-50%,-50%);pointer-events:none;opacity:0}
+  .guide.on{opacity:1}
+  .guide img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain}
+  .guide .area{opacity:0}
+  .guide.on .area{opacity:1}
+  .stampbox{position:absolute;left:50%;top:50%;width:71.8%;aspect-ratio:1/1;pointer-events:none;
+    transform:translate(-50%,-50%) scale(1.2);opacity:0;visibility:hidden}
+  .stampbox.on{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+  .stampbox img{width:100%;height:100%;object-fit:contain;display:block;transform-origin:50% 50%}
+  .idle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+  .idle .icon{width:30px;height:41px;margin:0 auto}
+  .idle .icon img{width:100%;height:100%;object-fit:contain;display:block}
+  .idle p{font-size:13px;color:var(--ink-2);margin:10px 0 0;letter-spacing:.04em}
+  .paper.pressing .idle,.paper.done .idle{display:none}
+  .sheet h2{font-size:18px;margin:12px 2px 8px;font-weight:700}
+  .stampbar{display:flex;flex-wrap:nowrap;gap:8px;align-items:center}
+  .chip{font-size:12px;padding:7px 11px;border-radius:8px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);text-decoration:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+  /* 墨量刻度条 */
+  .inkbar{
+    display:flex;gap:4px;flex:1;min-width:0;height:36px;align-items:center;
+    padding:0 7px;border-radius:10px;background:#ecebe7;
+    box-shadow:inset 0 1px 3px rgba(18,18,18,.10);
+    touch-action:none;opacity:.45
+  }
+  .inkbar.ready{opacity:1;cursor:pointer}
+  .inkbar i{
+    flex:1;height:20px;border-radius:5px;background:#dcdad4;
+    box-shadow:inset 0 1px 1px rgba(18,18,18,.05)
+  }
+  .inkbar i.on{box-shadow:inset 0 -1px 1px rgba(255,255,255,.20)}
+  .inkbar i.on:nth-child(1){background:#b3b0a8}
+  .inkbar i.on:nth-child(2){background:#96938c}
+  .inkbar i.on:nth-child(3){background:#78756e}
+  .inkbar i.on:nth-child(4){background:#57544e}
+  .inkbar i.on:nth-child(5){background:#33312d}
+  .inkbar i.on:nth-child(6){background:#111110}
+  .iconbtn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;
+    padding:0;border-radius:10px;color:var(--ink-2)}
+  .iconbtn:active{background:#f1ece0}
+  .iconbtn svg{width:17px;height:17px;display:block}
+  .nav{display:flex;justify-content:space-between;gap:8px;margin-top:12px}
+  /* 关于页 */
+  .panel.hero{text-align:center;padding:22px 16px}
+  .about-logo{width:72px;height:72px;display:block;margin:0 auto 12px}
+  .about-name{font-size:14px;font-weight:700}
+  .about-ver{font-size:12px;color:var(--ink-2);margin-top:6px;font-variant-numeric:tabular-nums}
+  .about-count{font-size:12px;color:var(--ink-2);margin-top:2px;font-variant-numeric:tabular-nums}
+  #pane-about p{margin:0;font-size:13px;line-height:1.75;color:var(--ink-2)}
+  @media (min-width:720px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:14px}
+    main{padding:18px 22px 60px}
+    .hrow{padding:12px 22px 8px}
+    .prog{padding:0 22px 10px}
+    nav.tabs{padding:0 18px}
+    nav.tabs button{flex:none;padding:10px 22px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <img class="logo" src="assets/logo.svg?v=2" alt="">
+    <div class="tt">
+      <h1 id="i18nTitle">MY JAPAN RAILWAY 150th ・ 駅スタンプ</h1>
+      <div class="sub" id="i18nSub">JR站点印章归档</div>
+    </div>
+    <div class="langs" id="langs"></div>
+  </div>
+  <div class="prog">
+    <div class="progbar"><i id="progFill" style="width:0%"></i></div>
+    <div class="progtext" id="progText"></div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="all" class="on"></button>
+  <button data-tab="mine"></button>
+  <button data-tab="stats"></button>
+  <button data-tab="about"></button>
+</nav>
+
+<main>
+  <section id="pane-all">
+    <div class="tools">
+      <input type="search" id="q" autocomplete="off">
+      <button class="btn" id="randomBtn"></button>
+    </div>
+    <div class="regions" id="regions"></div>
+    <div class="stat" id="stat"></div>
+    <div class="grid" id="grid"></div>
+    <div class="sentinel" id="sentinel"></div>
+  </section>
+
+  <section id="pane-mine" hidden>
+    <div class="stat" id="mineStat"></div>
+    <div class="regions" id="mineRegions" hidden></div>
+    <div class="grid" id="mineGrid"></div>
+    <div class="empty" id="mineEmpty"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" id="clearBtn"></button>
+    </div>
+  </section>
+
+  <section id="pane-stats" hidden>
+    <div class="panel">
+      <h3 id="statsTitle"></h3>
+      <div class="bigrow">
+        <span class="bignum" id="statsPct">0%</span>
+        <span class="bigsub" id="statsCount"></span>
+      </div>
+      <div class="meter"><i id="statsMeter" style="width:0%"></i></div>
+    </div>
+    <div class="panel">
+      <h3 id="distTitle"></h3>
+      <div class="dist" id="dist"></div>
+    </div>
+    <div class="panel">
+      <h3 id="recentTitle"></h3>
+      <div class="recent" id="recent"></div>
+    </div>
+  </section>
+
+  <section id="pane-about" hidden>
+    <div class="panel hero">
+      <img class="about-logo" src="assets/logo.svg?v=2" alt="">
+      <div class="about-name">MY JAPAN RAILWAY 150th ・ 駅スタンプ</div>
+      <div class="about-ver" id="aboutVer"></div>
+      <div class="about-count" id="aboutCount"></div>
+    </div>
+    <div class="panel">
+      <h3 id="aboutSrcTitle"></h3>
+      <p id="aboutSrc"></p>
+    </div>
+    <div class="panel">
+      <h3 id="aboutNameTitle"></h3>
+      <p id="aboutName"></p>
+    </div>
+    <div class="panel">
+      <h3 id="aboutStoreTitle"></h3>
+      <p id="aboutStore"></p>
+    </div>
+    <div class="panel">
+      <h3 id="aboutCrTitle"></h3>
+      <p id="aboutCr"></p>
+    </div>
+  </section>
+</main>
+
+<div class="mask" id="mask">
+  <div class="sheet">
+    <button class="close" id="close">✕</button>
+    <div class="paper" id="paper">
+      <div class="idle" id="idle">
+        <div class="icon"><img src="assets/icon-touch--hand.png" alt=""></div>
+        <p id="i18nTip"></p>
+      </div>
+      <div class="guide" id="guide">
+        <img class="line" src="assets/img-guide--line.png" alt="">
+        <img class="area" src="assets/img-guide--area.png" alt="">
+      </div>
+      <div class="stampbox" id="stampbox"><img id="mImg" alt=""></div>
+    </div>
+    <h2 id="mName">—</h2>
+
+    <div class="stampbar">
+      <div class="inkbar" id="inkbar"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <button class="chip iconbtn" id="mReset" title=""></button>
+      <a class="chip iconbtn" id="mOpen" title=""></a>
+    </div>
+
+    <div class="nav">
+      <button class="chip" id="prev"></button>
+      <button class="chip" id="next"></button>
+    </div>
+  </div>
+</div>
+
+<script src="data/stamps.js?v=6"></script>
+<script>
+(function(){
+  var DATA = window.STAMP_DATA || [];
+  var KMAP = window.KANJI_MAP || {};
+  var BASE = 'https://railway150.jp/contents/stamp/assets/img/';
+  // 默认走官网链接；本机预览可加 ?local=1 改用本地已下载的图
+  var USE_LOCAL = /[?&]local=1/.test(location.search);
+  var LANG_KEY = 'tt-lang';
+  var MINE_KEY = 'tt-mine';
+
+  /* ---------------- 国际化 ---------------- */
+  var I18N = {
+    zh: {
+      title:'MY JAPAN RAILWAY 150th ・ 駅スタンプ',
+      sub:'JR站点印章归档',
+      tabAll:'全部', tabMine:'我的', tabStats:'统计',
+      ph:'搜索　编号・站名・罗马字',
+      random:'随机一枚',
+      all:'共 {n} 枚', found:'符合 {m}', none:'没有匹配的印章',
+      prog:'已收集 {m} / {n}',
+      mineEmptyTitle:'还没有盖过章',
+      mineEmptyBody:'在全部标签页点开任意一枚，长按即可盖上你的章。',
+      mineStat:'已收集 {m} 枚',
+      clear:'清空收藏',
+      clearAsk:'确定清空全部收藏？',
+      statsTitle:'收集进度', statsCount:'共 {n} 枚',
+      distTitle:'地区分布', regAll:'全部地区', recentTitle:'最近盖章',
+      recentEmpty:'还没有记录',
+      tip:'长按盖章', restamp:'重新盖',
+      open:'打开原图', openHint:'打开原图链接',
+      prev:'上一个', next:'下一个',
+      tabAbout:'关于',
+      aboutVer:'版本 {v} ・ {d}',
+      aboutCount:'共 {n} 枚 ・ 已收集 {m} 枚',
+      aboutSrcTitle:'图片来源',
+      aboutSrcLink:'全部印章图直接取自 railway150.jp 的公开静态文件。',
+      aboutSrcLocal:'当前使用本机已下载的图片，共 1235 枚。',
+      aboutNameTitle:'站名来源',
+      aboutName:'站名由视觉模型从印章图案识别整理。个别条目可能有偏差，请以图案本身为准。',
+      aboutStoreTitle:'收集记录',
+      aboutStore:'你盖过的章与墨色深浅只保存在本机浏览器，不会上传到任何服务器。',
+      aboutCrTitle:'版权',
+      aboutCr:'印章图案版权归 JR 集团各公司所有。本页仅供个人学习与收藏查阅，请勿商用。'
+    },
+    ja: {
+      title:'MY JAPAN RAILWAY 150th ・ 駅スタンプ',
+      sub:'全国の駅スタンプ・アーカイブ',
+      tabAll:'すべて', tabMine:'マイ', tabStats:'記録',
+      ph:'検索　番号・駅名・ローマ字',
+      random:'おまかせ',
+      all:'全 {n} 枚', found:'該当 {m}', none:'該当なし',
+      prog:'収集 {m} / {n}',
+      mineEmptyTitle:'まだ押していません',
+      mineEmptyBody:'すべてのタブから一枚ひらいて、長押しで押印できます。',
+      mineStat:'収集 {m} 枚',
+      clear:'記録を消す',
+      clearAsk:'記録をすべて消しますか',
+      statsTitle:'収集の進み', statsCount:'全 {n} 枚',
+      distTitle:'エリア分布', regAll:'すべてのエリア', recentTitle:'最近の押印',
+      recentEmpty:'まだ記録がありません',
+      tip:'長押しで押印', restamp:'押し直す',
+      open:'原本を開く', openHint:'原本のリンクを開く',
+      prev:'前へ', next:'次へ',
+      tabAbout:'情報',
+      aboutVer:'バージョン {v} ・ {d}',
+      aboutCount:'全 {n} 枚 ・ 収集 {m} 枚',
+      aboutSrcTitle:'画像の出典',
+      aboutSrcLink:'すべてのスタンプ画像は railway150.jp の公開静的ファイルから直接読み込んでいます。',
+      aboutSrcLocal:'現在は本機に保存済みの画像を使用しています。',
+      aboutNameTitle:'駅名について',
+      aboutName:'駅名は視覚モデルがスタンプ画像から読み取って整理したものです。誤りがある場合は画像を優先してください。',
+      aboutStoreTitle:'収集記録',
+      aboutStore:'押印した記録とインクの濃さは、この端末のブラウザにのみ保存されます。',
+      aboutCrTitle:'著作権',
+      aboutCr:'スタンプ画像の著作権は JR グループ各社に帰属します。個人の学習・鑑賞の範囲でご利用ください。'
+    },
+    en: {
+      title:'MY JAPAN RAILWAY 150th ・ 駅 Stamps',
+      sub:'JR station stamp archive',
+      tabAll:'All', tabMine:'Mine', tabStats:'Stats',
+      ph:'Search　id, station, romaji',
+      random:'Random',
+      all:'{n} stamps', found:'{m} matches', none:'No match',
+      prog:'Collected {m} / {n}',
+      mineEmptyTitle:'No stamps yet',
+      mineEmptyBody:'Open any stamp under All and press and hold to stamp it.',
+      mineStat:'{m} collected',
+      clear:'Clear',
+      clearAsk:'Clear all collected stamps?',
+      statsTitle:'Progress', statsCount:'of {n}',
+      distTitle:'By region', regAll:'All regions', recentTitle:'Recent',
+      recentEmpty:'Nothing yet',
+      tip:'Press and hold', restamp:'Stamp again',
+      open:'Open original', openHint:'Open the source link',
+      prev:'Prev', next:'Next',
+      tabAbout:'About',
+      aboutVer:'Version {v} ・ {d}',
+      aboutCount:'{n} stamps ・ {m} collected',
+      aboutSrcTitle:'Image source',
+      aboutSrcLink:'All stamp images are loaded directly from public static files on railway150.jp.',
+      aboutSrcLocal:'Currently using the images downloaded on this device.',
+      aboutNameTitle:'Station names',
+      aboutName:'Station names were read from the stamp artwork by a vision model. Treat the artwork as the source of truth.',
+      aboutStoreTitle:'Collection data',
+      aboutStore:'Your stamps and ink levels are stored only in this browser. Nothing is uploaded.',
+      aboutCrTitle:'Copyright',
+      aboutCr:'Stamp artwork is copyright of the JR Group companies. For personal study and reference only.'
+    }
+  };
+  var lang = 'zh';
+  try { var sv = localStorage.getItem(LANG_KEY); if (sv && I18N[sv]) lang = sv; } catch (e) {}
+  function T(k){ return (I18N[lang] && I18N[lang][k]) || I18N.zh[k] || k; }
+  function fmt(k, v){
+    var s = T(k);
+    for (var key in v) s = s.split('{' + key + '}').join(v[key]);
+    return s;
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var els = {
+    title:$('i18nTitle'), sub:$('i18nSub'), tip:$('i18nTip'),
+    open:$('mOpen'), inkbar:$('inkbar'),
+    prev:$('prev'), next:$('next'), reset:$('mReset'), q:$('q'), stat:$('stat'),
+    randomBtn:$('randomBtn'), mineStat:$('mineStat'), mineEmpty:$('mineEmpty'),
+    clearBtn:$('clearBtn'), tabs:$('tabs'), progFill:$('progFill'), progText:$('progText')
+  };
+  var VERSION = '1.1.0', BUILD = '2026-10-06';
+
+  /* ---------------- 收藏记录 ---------------- */
+  var mine = {};
+  try { mine = JSON.parse(localStorage.getItem(MINE_KEY) || '{}') || {}; } catch (e) { mine = {}; }
+  function saveMine(){ try { localStorage.setItem(MINE_KEY, JSON.stringify(mine)); } catch (e) {} }
+  function mineIds(){ return Object.keys(mine).map(Number); }
+
+  /* ---------------- 语言 ---------------- */
+  function applyLang(){
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : (lang === 'en' ? 'en' : 'ja');
+    els.title.textContent = T('title');
+    els.sub.textContent = T('sub');
+    els.tip.textContent = T('tip');
+    els.open.title = T('openHint');
+    els.reset.title = T('restamp');
+    els.prev.textContent = T('prev');
+    els.next.textContent = T('next');
+    els.q.placeholder = T('ph');
+    els.randomBtn.textContent = T('random');
+    els.clearBtn.textContent = T('clear');
+    els.mineEmpty.innerHTML = '<span class="big">' + esc(T('mineEmptyTitle')) + '</span>' + esc(T('mineEmptyBody'));
+    $('statsTitle').textContent = T('statsTitle');
+    $('distTitle').textContent = T('distTitle');
+    $('recentTitle').textContent = T('recentTitle');
+    $('aboutVer').textContent = fmt('aboutVer', {v: VERSION, d: BUILD});
+    $('aboutSrcTitle').textContent = T('aboutSrcTitle');
+    $('aboutSrc').textContent = USE_LOCAL ? T('aboutSrcLocal') : T('aboutSrcLink');
+    $('aboutNameTitle').textContent = T('aboutNameTitle');
+    $('aboutName').textContent = T('aboutName');
+    $('aboutStoreTitle').textContent = T('aboutStoreTitle');
+    $('aboutStore').textContent = T('aboutStore');
+    $('aboutCrTitle').textContent = T('aboutCrTitle');
+    $('aboutCr').textContent = T('aboutCr');
+    var tabKey = { all:'tabAll', mine:'tabMine', stats:'tabStats', about:'tabAbout' };
+    document.querySelectorAll('#tabs button').forEach(function(b){
+      b.textContent = T(tabKey[b.dataset.tab]);
+    });
+    document.querySelectorAll('#langs button').forEach(function(b){
+      b.classList.toggle('on', b.dataset.lang === lang);
+    });
+    renderInk();
+    renderProgress();
+    lastQ = null;
+    renderRegions();
+    renderAll();
+    renderMine();
+    renderStats();
+  }
+
+  var langs = $('langs');
+  [['zh','中文'],['ja','日本語'],['en','EN']].forEach(function(p){
+    var b = document.createElement('button');
+    b.dataset.lang = p[0];
+    b.textContent = p[1];
+    b.addEventListener('click', function(){
+      lang = p[0];
+      try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+      applyLang();
+    });
+    langs.appendChild(b);
+  });
+
+  /* ---------------- 搜索匹配 ---------------- */
+  function toSC(s){
+    var out = '';
+    for (var i = 0; i < s.length; i++) { var c = s[i]; out += (KMAP[c] || c); }
+    return out;
+  }
+  function norm(s){
+    s = String(s).normalize ? String(s).normalize('NFKC') : String(s);
+    s = s.toLowerCase().replace(/[\s\u3000・ー\-—–_./。、，]/g, '');
+    return s.replace(/(駅|站|sta\.?|station)$/, '');
+  }
+  function prep(d){
+    if (!d._n) {
+      d._n = norm(d.name); d._s = norm(d.sc);
+      d._r = String(d.romaji || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+    return d;
+  }
+  function hit(d, raw){
+    prep(d);
+    var qn = norm(raw);
+    if (!qn) return true;
+    var cands = [qn, toSC(qn), toSC(String(raw)).toLowerCase()];
+    for (var i = 0; i < cands.length; i++) {
+      var c = cands[i];
+      if (c && (d._n.indexOf(c) >= 0 || d._s.indexOf(c) >= 0)) return true;
+    }
+    var qr = String(raw).toLowerCase().replace(/[^a-z0-9]/g, '');
+    return qr.length >= 3 && d._r && d._r.indexOf(qr) >= 0;
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  /* ---------------- JR 地区 ---------------- */
+  var REGIONS = ['北海道', '東日本', '東海', '西日本', '四国', '九州', 'その他'];
+  var REGION_I18N = {
+    zh: {'北海道':'北海道','東日本':'东日本','東海':'东海','西日本':'西日本','四国':'四国','九州':'九州','その他':'其他'},
+    ja: {'北海道':'北海道','東日本':'東日本','東海':'東海','西日本':'西日本','四国':'四国','九州':'九州','その他':'その他'},
+    en: {'北海道':'Hokkaido','東日本':'East','東海':'Central','西日本':'West','四国':'Shikoku','九州':'Kyushu','その他':'Others'}
+  };
+  function regionLabel(r){ return (REGION_I18N[lang] || REGION_I18N.zh)[r] || r; }
+
+  /* ---------------- 资源地址 ---------------- */
+  function remoteUrl(id, lvl){ return BASE + 'stamp/' + id + '--0' + lvl + '.png'; }
+  function fullSrc(id, lvl){ return (USE_LOCAL && lvl === 6) ? ('stamps/' + id + '--06.png') : remoteUrl(id, lvl); }
+  function thumSrc(id, lvl){ return (USE_LOCAL && lvl === 6) ? ('thumbs/' + id + '.webp') : (BASE + 'stamp_thum/' + id + '--0' + lvl + '.png'); }
+  function gridSrc(id){ return (USE_LOCAL) ? ('thumbs/' + id + '.webp') : (BASE + 'stamp_thum/' + id + '--06.png'); }
+  function ogpUrl(id){ return BASE + 'sharer/ogp_' + id + '.png'; }
+
+  /* ---------------- Tab ---------------- */
+  var curTab = 'all';
+  var pane = { all: $('pane-all'), mine: $('pane-mine'), stats: $('pane-stats'), about: $('pane-about') };
+  document.querySelectorAll('#tabs button').forEach(function(b){
+    b.addEventListener('click', function(){ setTab(b.dataset.tab); });
+  });
+  function setTab(t){
+    curTab = t;
+    document.querySelectorAll('#tabs button').forEach(function(b){
+      b.classList.toggle('on', b.dataset.tab === t);
+    });
+    for (var k in pane) pane[k].hidden = (k !== t);
+    if (t === 'mine') renderMine();
+    if (t === 'stats') renderStats();
+    if (t === 'about') renderAbout();
+    window.scrollTo(0, 0);
+  }
+
+  function renderAbout(){
+    $('aboutCount').textContent = fmt('aboutCount', {n: DATA.length, m: mineIds().length});
+  }
+
+  /* ---------------- 进度 ---------------- */
+  function renderProgress(){
+    var n = DATA.length, m = mineIds().length;
+    els.progFill.style.width = (n ? (m / n * 100) : 0).toFixed(2) + '%';
+    els.progText.textContent = fmt('prog', {m: m, n: n});
+    $('aboutCount').textContent = fmt('aboutCount', {n: n, m: m});
+  }
+
+  /* ---------------- 全部 ---------------- */
+  var grid = $('grid'), sentinel = $('sentinel');
+  var filtered = DATA.slice(), rendered = 0, CHUNK = 120, lastQ = null, curRegion = 'all';
+  var TOTAL_OF = {};
+  REGIONS.forEach(function(r){ TOTAL_OF[r] = 0; });
+  DATA.forEach(function(d){ TOTAL_OF[d.region] = (TOTAL_OF[d.region] || 0) + 1; });
+
+  function renderRegions(){
+    var box = $('regions');
+    box.innerHTML = '';
+    var list = [['all', T('regAll')]].concat(REGIONS.map(function(r){ return [r, regionLabel(r)]; }));
+    list.forEach(function(p){
+      var b = document.createElement('button');
+      b.textContent = p[1];
+      b.classList.toggle('on', curRegion === p[0]);
+      b.addEventListener('click', function(){
+        curRegion = p[0];
+        renderRegions();
+        renderAll();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function makeCard(d, opts){
+    opts = opts || {};
+    var el = document.createElement('div');
+    el.className = 'card' + (opts.mine ? ' mine' : '');
+    var img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = d.name || '';
+    img.src = opts.mine ? thumSrc(d.id, mine[d.id].lv) : gridSrc(d.id);
+    if (opts.mine) img.style.transform = 'rotate(' + mine[d.id].tilt + 'deg)';
+    img.onerror = function(){
+      this.onerror = null;
+      this.src = fullSrc(d.id, 6);
+    };
+    var fig = document.createElement('figure');
+    fig.appendChild(img);
+    var nm = document.createElement('div');
+    nm.className = 'nm';
+    nm.textContent = d.name || '';
+    el.appendChild(fig);
+    el.appendChild(nm);
+    if (!opts.mine && mine[d.id]) {
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      el.appendChild(dot);
+    }
+    el.addEventListener('click', function(){ open(d.id); });
+    return el;
+  }
+
+  function updateStat(){
+    var base = (curRegion === 'all') ? DATA : DATA.filter(function(d){ return d.region === curRegion; });
+    var s = fmt('all', {n: base.length});
+    if (filtered.length !== base.length) s += ' ・ ' + fmt('found', {m: filtered.length});
+    els.stat.textContent = s;
+  }
+  function renderMore(){
+    var end = Math.min(rendered + CHUNK, filtered.length);
+    var frag = document.createDocumentFragment();
+    for (var i = rendered; i < end; i++) frag.appendChild(makeCard(filtered[i]));
+    grid.appendChild(frag);
+    rendered = end;
+    updateStat();
+  }
+  function renderAll(){
+    var v = els.q.value.trim();
+    lastQ = v;
+    var base = (curRegion === 'all') ? DATA : DATA.filter(function(d){ return d.region === curRegion; });
+    filtered = v ? base.filter(function(d){ return String(d.id).indexOf(v) >= 0 || hit(d, v); }) : base.slice();
+    grid.innerHTML = '';
+    rendered = 0;
+    if (!filtered.length) {
+      grid.innerHTML = '<div class="empty">' + esc(T('none')) + '</div>';
+      updateStat();
+      return;
+    }
+    renderMore();
+  }
+  els.q.addEventListener('input', function(){ renderAll(); });
+  new IntersectionObserver(function(es){
+    if (es[0].isIntersecting && rendered < filtered.length) renderMore();
+  }, {rootMargin: '900px'}).observe(sentinel);
+
+  els.randomBtn.addEventListener('click', function(){
+    var d = DATA[Math.floor(Math.random() * DATA.length)];
+    if (d) open(d.id);
+  });
+
+  /* ---------------- 我的 ---------------- */
+  var mineGrid = $('mineGrid'), mineRegionsBox = $('mineRegions');
+  var curMineRegion = 'all';
+
+  function mineRegionCount(){
+    var cnt = {};
+    mineIds().forEach(function(id){
+      var r = (byId[id] && byId[id].region) || 'その他';
+      cnt[r] = (cnt[r] || 0) + 1;
+    });
+    return cnt;
+  }
+  function renderMineRegions(){
+    var cnt = mineRegionCount();
+    if (curMineRegion !== 'all' && !cnt[curMineRegion]) curMineRegion = 'all';
+    var used = REGIONS.filter(function(r){ return cnt[r]; });
+    mineRegionsBox.innerHTML = '';
+    if (used.length < 2) { mineRegionsBox.hidden = true; return; }
+    mineRegionsBox.hidden = false;
+    var total = mineIds().length;
+    var list = [['all', T('regAll') + ' ' + total]].concat(
+      used.map(function(r){ return [r, regionLabel(r) + ' ' + cnt[r]]; }));
+    list.forEach(function(p){
+      var b = document.createElement('button');
+      b.textContent = p[1];
+      b.classList.toggle('on', curMineRegion === p[0]);
+      b.addEventListener('click', function(){
+        curMineRegion = p[0];
+        renderMine();
+      });
+      mineRegionsBox.appendChild(b);
+    });
+  }
+
+  function renderMine(){
+    var cnt = mineRegionCount();
+    if (curMineRegion !== 'all' && !cnt[curMineRegion]) curMineRegion = 'all';
+    var ids = mineIds().filter(function(id){
+      return curMineRegion === 'all' || ((byId[id] && byId[id].region) || 'その他') === curMineRegion;
+    }).sort(function(a, b){ return (mine[b].at || 0) - (mine[a].at || 0); });
+    mineGrid.innerHTML = '';
+    if (!mineIds().length) {
+      mineRegionsBox.hidden = true;
+      mineGrid.hidden = true;
+      els.mineEmpty.hidden = false;
+      els.mineStat.textContent = fmt('mineStat', {m: 0});
+      els.clearBtn.hidden = true;
+      return;
+    }
+    renderMineRegions();
+    mineGrid.hidden = false;
+    els.mineEmpty.hidden = true;
+    els.clearBtn.hidden = false;
+    els.mineStat.textContent = fmt('mineStat', {m: ids.length});
+    var frag = document.createDocumentFragment();
+    ids.forEach(function(id){
+      var d = byId[id];
+      if (d) frag.appendChild(makeCard(d, {mine: true}));
+    });
+    mineGrid.appendChild(frag);
+  }
+  els.clearBtn.addEventListener('click', function(){
+    if (!mineIds().length) return;
+    if (!confirm(T('clearAsk'))) return;
+    mine = {};
+    saveMine();
+    curMineRegion = 'all';
+    renderMine();
+    renderProgress();
+    renderStats();
+    renderAll();
+  });
+
+  /* ---------------- 统计 ---------------- */
+  var byId = {};
+  DATA.forEach(function(d){ byId[d.id] = d; });
+
+  function renderStats(){
+    var n = DATA.length, ids = mineIds(), m = ids.length;
+    var pct = n ? (m / n * 100) : 0;
+    $('statsPct').textContent = (pct < 10 && pct > 0 ? pct.toFixed(1) : Math.round(pct)) + '%';
+    $('statsCount').textContent = T('statsCount').replace('{n}', n) + ' ・ ' + m + ' / ' + n;
+    $('statsMeter').style.width = pct.toFixed(2) + '%';
+
+    var got = {}, tot = {};
+    REGIONS.forEach(function(r){ got[r] = 0; tot[r] = TOTAL_OF[r] || 0; });
+    ids.forEach(function(id){
+      var r = (byId[id] && byId[id].region) || 'その他';
+      got[r] = (got[r] || 0) + 1;
+    });
+    var box = $('dist');
+    box.innerHTML = '';
+    REGIONS.forEach(function(r){
+      if (!tot[r]) return;
+      var t = tot[r], g = got[r] || 0;
+      var row = document.createElement('div');
+      row.className = 'drow';
+      row.innerHTML = '<span class="k">' + esc(regionLabel(r)) + '</span>' +
+        '<span class="bar"><i style="width:' + (g / t * 100).toFixed(1) + '%"></i></span>' +
+        '<span class="v">' + g + '/' + t + '</span>';
+      box.appendChild(row);
+    });
+
+    var rec = $('recent');
+    rec.innerHTML = '';
+    ids.sort(function(a, b){ return (mine[b].at || 0) - (mine[a].at || 0); });
+    if (!ids.length) {
+      rec.innerHTML = '<div class="empty">' + esc(T('recentEmpty')) + '</div>';
+      return;
+    }
+    ids.slice(0, 12).forEach(function(id){
+      var f = document.createElement('figure');
+      var im = document.createElement('img');
+      im.loading = 'lazy';
+      im.src = thumSrc(id, mine[id].lv);
+      im.style.transform = 'rotate(' + mine[id].tilt + 'deg)';
+      im.onerror = function(){ this.onerror = null; this.src = fullSrc(id, 6); };
+      f.appendChild(im);
+      f.addEventListener('click', function(){ open(id); });
+      rec.appendChild(f);
+    });
+  }
+
+  /* ---------------- 押印 ---------------- */
+  var mask = $('mask'), paper = $('paper'), mImg = $('mImg'), mName = $('mName'),
+      inkbar = $('inkbar'), guide = $('guide'), stampbox = $('stampbox');
+  var curUrl = '';
+
+  // 原版逻辑：按压时长决定墨色档位，歪斜角度随机取 ±4°
+  var TILT = [0, 1, 2, 3, 4, -1, -2, -3, -4];
+  var FALLBACK = {
+    1:'opacity(0.34) saturate(0.45) blur(1.4px)',
+    2:'opacity(0.58) saturate(0.68) blur(0.7px)',
+    3:'opacity(0.76) saturate(0.84) blur(0.35px)',
+    4:'opacity(0.90) saturate(0.95) blur(0.12px)',
+    5:'opacity(0.97) saturate(1) blur(0)',
+    6:'none'
+  };
+  function levelOf(ms){
+    return ms <= 200 ? 1 : ms <= 400 ? 2 : ms <= 600 ? 3 : ms <= 800 ? 4 : ms <= 1000 ? 5 : 6;
+  }
+
+  var curId = null, stamped = false, level = 6, pressStart = 0, pressing = false, pos = {x:0.5, y:0.5};
+
+  function renderInk(){
+    if (!inkbar) return;
+    var cells = inkbar.children;
+    for (var i = 0; i < cells.length; i++) cells[i].classList.toggle('on', stamped && i < level);
+    inkbar.classList.toggle('ready', stamped);
+  }
+  function paintUrl(){
+    curUrl = remoteUrl(curId, stamped ? level : 6);
+    if (els.open) els.open.href = curUrl;
+  }
+  function clampTo(v, half){ return Math.min(1 - half, Math.max(half, v)); }
+  function applyPoint(){
+    guide.style.left = (clampTo(pos.x, 0.816 / 2) * 100) + '%';
+    guide.style.top = (clampTo(pos.y, 0.816 / 2) * 100) + '%';
+    stampbox.style.left = (clampTo(pos.x, 0.718 / 2) * 100) + '%';
+    stampbox.style.top = (clampTo(pos.y, 0.718 / 2) * 100) + '%';
+  }
+  function setPoint(cx, cy){
+    var r = paper.getBoundingClientRect();
+    if (!r.width) return;
+    pos.x = (cx - r.left) / r.width;
+    pos.y = (cy - r.top) / r.height;
+    applyPoint();
+  }
+
+  function resetStamp(){
+    stamped = false; level = 6; pressing = false; pressStart = 0; pos = {x:0.5, y:0.5};
+    paper.classList.remove('done', 'pressing');
+    guide.classList.remove('on');
+    stampbox.classList.remove('on');
+    mImg.onerror = null; mImg.onload = null;
+    mImg.style.filter = 'none'; mImg.style.transform = 'none';
+    mImg.src = fullSrc(curId, 6);
+    applyPoint();
+    renderInk();
+    paintUrl();
+  }
+
+  function showStamp(lvl){
+    var want = lvl;
+    mImg.onload = function(){ mImg.style.filter = 'none'; };
+    mImg.onerror = function(){
+      mImg.onload = null; mImg.onerror = null;
+      mImg.style.filter = FALLBACK[want] || 'none';
+      if (want < 6) mImg.src = fullSrc(curId, 6);
+    };
+    mImg.style.filter = FALLBACK[lvl] || 'none';
+    mImg.src = fullSrc(curId, lvl);
+  }
+
+  function finish(ms){
+    level = levelOf(ms);
+    var tilt = TILT[Math.floor(Math.random() * TILT.length)];
+    stamped = true; pressing = false;
+    paper.classList.remove('pressing');
+    paper.classList.add('done');
+    guide.classList.remove('on');
+    mImg.style.transform = 'rotate(' + tilt + 'deg)';
+    showStamp(level);
+    stampbox.classList.add('on');
+    mine[curId] = {lv: level, tilt: tilt, at: Date.now()};
+    saveMine();
+    renderInk();
+    paintUrl();
+    renderProgress();
+    renderAll();
+    if (curTab === 'mine') renderMine();
+    if (curTab === 'stats') renderStats();
+  }
+
+  /* 墨色条：盖完之后可以直接滑动改深浅 */
+  var barDrag = false;
+  function barLevel(e){
+    var r = inkbar.getBoundingClientRect();
+    if (!r.width) return level;
+    var t = (e.clientX - r.left) / r.width;
+    return Math.min(6, Math.max(1, Math.ceil(t * 6)));
+  }
+  function setInk(lv){
+    if (!stamped || !mine[curId] || lv === level) return;
+    level = lv;
+    showStamp(level);
+    mine[curId].lv = level;
+    saveMine();
+    renderInk();
+    paintUrl();
+  }
+  inkbar.addEventListener('pointerdown', function(e){
+    if (!stamped) return;
+    e.preventDefault(); e.stopPropagation();
+    barDrag = true;
+    setInk(barLevel(e));
+  });
+  document.addEventListener('pointermove', function(e){
+    if (barDrag && typeof e.clientX === 'number') setInk(barLevel(e));
+  });
+  document.addEventListener('pointerup', function(){
+    if (!barDrag) return;
+    barDrag = false;
+    renderMine(); renderStats();
+  });
+
+  function beginPress(e){
+    if (e && e.preventDefault) e.preventDefault();
+    if (!curId || stamped || pressing) return;
+    pressing = true; pressStart = Date.now();
+    if (e && typeof e.clientX === 'number') setPoint(e.clientX, e.clientY);
+    paper.classList.add('pressing');
+    guide.classList.add('on');
+  }
+  function endPress(e){
+    if (e && e.preventDefault) e.preventDefault();
+    if (!curId || stamped || !pressing) return;
+    finish(Date.now() - pressStart);
+  }
+  paper.addEventListener('pointerdown', beginPress);
+  paper.addEventListener('pointerup', endPress);
+  paper.addEventListener('pointercancel', endPress);
+  document.addEventListener('pointerup', endPress);
+  document.addEventListener('pointermove', function(e){
+    if (pressing && typeof e.clientX === 'number') setPoint(e.clientX, e.clientY);
+  });
+  paper.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  function open(id){
+    var d = byId[id];
+    if (!d) return;
+    curId = id;
+    mName.textContent = d.name || '';
+    mask.classList.add('on');
+    resetStamp();
+  }
+  function close(){
+    mask.classList.remove('on');
+    curId = null; pressing = false;
+  }
+  function step(dir){
+    var i = -1;
+    for (var k = 0; k < DATA.length; k++) if (DATA[k].id === curId) { i = k; break; }
+    var n = DATA[(i + dir + DATA.length) % DATA.length];
+    if (n) open(n.id);
+  }
+
+  $('close').addEventListener('click', close);
+  els.reset.addEventListener('click', function(e){ e.stopPropagation(); resetStamp(); });
+  mask.addEventListener('click', function(e){ if (e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){
+    if (!curId) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+  els.prev.addEventListener('click', function(){ step(-1); });
+  els.next.addEventListener('click', function(){ step(1); });
+  var OPEN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"></path><path d="M20 4l-8.6 8.6"></path><path d="M18.5 14.5V19a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2H10"></path></svg>';
+  var RESET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.49-6.01"></path><path d="M20.5 3.5v5h-5"></path></svg>';
+  els.open.innerHTML = OPEN_ICON;
+  els.reset.innerHTML = RESET_ICON;
+  els.open.addEventListener('click', function(e){
+    if (!curUrl) return;
+    e.preventDefault();
+    location.href = curUrl;
+  });
+
+  applyLang();
+  setTab('all');
+})();
+</script>
+</body>
+</html>

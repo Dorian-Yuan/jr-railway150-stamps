@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="MY JAPAN RAILWAY 150th stamp archive">
+<defs>
+<mask id="perf"><rect width="120" height="120" fill="#fff"/><circle cx="60.00" cy="8.00" r="3.77" fill="#000"/><circle cx="72.44" cy="9.51" r="3.77" fill="#000"/><circle cx="84.17" cy="13.96" r="3.77" fill="#000"/><circle cx="94.48" cy="21.08" r="3.77" fill="#000"/><circle cx="102.80" cy="30.46" r="3.77" fill="#000"/><circle cx="108.62" cy="41.56" r="3.77" fill="#000"/><circle cx="111.62" cy="53.73" r="3.77" fill="#000"/><circle cx="111.62" cy="66.27" r="3.77" fill="#000"/><circle cx="108.62" cy="78.44" r="3.77" fill="#000"/><circle cx="102.80" cy="89.54" r="3.77" fill="#000"/><circle cx="94.48" cy="98.92" r="3.77" fill="#000"/><circle cx="84.17" cy="106.04" r="3.77" fill="#000"/><circle cx="72.44" cy="110.49" r="3.77" fill="#000"/><circle cx="60.00" cy="112.00" r="3.77" fill="#000"/><circle cx="47.56" cy="110.49" r="3.77" fill="#000"/><circle cx="35.83" cy="106.04" r="3.77" fill="#000"/><circle cx="25.52" cy="98.92" r="3.77" fill="#000"/><circle cx="17.20" cy="89.54" r="3.77" fill="#000"/><circle cx="11.38" cy="78.44" r="3.77" fill="#000"/><circle cx="8.38" cy="66.27" r="3.77" fill="#000"/><circle cx="8.38" cy="53.73" r="3.77" fill="#000"/><circle cx="11.38" cy="41.56" r="3.77" fill="#000"/><circle cx="17.20" cy="30.46" r="3.77" fill="#000"/><circle cx="25.52" cy="21.08" r="3.77" fill="#000"/><circle cx="35.83" cy="13.96" r="3.77" fill="#000"/><circle cx="47.56" cy="9.51" r="3.77" fill="#000"/></mask>
+<clipPath id="inner"><circle cx="60.0" cy="60.0" r="46.0"/></clipPath>
+</defs>
+<circle cx="60.0" cy="60.0" r="52.0" fill="#1B1B1B" mask="url(#perf)"/>
+<circle cx="60.0" cy="60.0" r="46.0" fill="#ffffff"/>
+<g clip-path="url(#inner)">
+<path d="M40 47 Q40 31 57 31 H63 Q80 31 80 47 V73 Q80 92 60 92 Q40 92 40 73 Z" fill="#1B1B1B"/>
+<path d="M48 41 Q48 37 53 37 H67 Q72 37 72 41 V55 Q72 59 67 59 H53 Q48 59 48 55 Z" fill="#ffffff"/>
+<circle cx="60" cy="71" r="5.2" fill="#ffffff"/>
+<path d="M40 79 H80" stroke="#6E6A62" stroke-width="2.6" stroke-linecap="round" opacity=".55"/>
+</g>
+<circle cx="60.0" cy="60.0" r="46.0" fill="none" stroke="#1B1B1B" stroke-width="1.6" opacity=".35"/>
+</svg>
