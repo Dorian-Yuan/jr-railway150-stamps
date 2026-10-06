@@ -1,5 +1,10 @@
 # MY JAPAN RAILWAY 150th ・ 駅スタンプ
 
+🌐 **在线地址 https://dorian-yuan.github.io/jr-railway150-stamps/**
+
+![version](https://img.shields.io/badge/version-1.1.0-161513)
+![stamps](https://img.shields.io/badge/stamps-1235-161513)
+
 从 **https://railway150.jp/contents/stamp/**（JR 集团 TRAIN TRIP 网页应用）逆向整理出的
 全国车站数字印章原图 + 站名索引 + 可交互画廊。
 
