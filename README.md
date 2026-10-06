@@ -2,7 +2,7 @@
 
 **简体中文** ｜ [日本語](README.ja.md) ｜ [English](README.en.md)
 
-[![version](https://img.shields.io/badge/version-2.0.0-161513)](https://dorian-yuan.github.io/jr-railway150-stamps/)
+[![version](https://img.shields.io/badge/version-1.2.2-161513)](https://dorian-yuan.github.io/jr-railway150-stamps/)
 [![stamps](https://img.shields.io/badge/stamps-1235-161513)](https://dorian-yuan.github.io/jr-railway150-stamps/)
 
 🌐 **https://dorian-yuan.github.io/jr-railway150-stamps/**
@@ -62,4 +62,4 @@
 
 ---
 
-**当前版本 2.0.0** ・ 更新于 2026-10-06
+**当前版本 1.2.2** ・ 更新于 2026-10-06
