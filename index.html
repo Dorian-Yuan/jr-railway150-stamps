@@ -526,7 +526,7 @@
     nearStat:$('nearStat'), nearBtn:$('nearBtn'), nearEmpty:$('nearEmpty'),
     clearBtn:$('clearBtn'), tabs:$('tabs'), progFill:$('progFill'), progText:$('progText')
   };
-  var VERSION = '2.1.0', BUILD = '2026-10-06';
+  var VERSION = '2.1.1', BUILD = '2026-10-06';
 
   /* ---------------- 收藏记录 ---------------- */
   var mine = {};
@@ -1018,7 +1018,7 @@
       im.style.transform = 'rotate(' + mine[id].tilt + 'deg)';
       im.onerror = function(){ this.onerror = null; this.src = fullSrc(id, 6); };
       f.appendChild(im);
-      f.addEventListener('click', function(){ open(id); });
+      f.addEventListener('click', function(){ open(id, {fromMine: true, readOnly: true}); });
       rec.appendChild(f);
     });
   }
@@ -1043,6 +1043,7 @@
   }
 
   var curId = null, stamped = false, level = 6, pressStart = 0, pressing = false, pos = {x:0.5, y:0.5};
+  var lastOpts = {};
 
   function renderInk(){
     if (!inkbar) return;
@@ -1170,14 +1171,15 @@
 
   function open(id, opts){
     opts = opts || {};
+    lastOpts = opts;
     var d = byId[id];
     if (!d) return;
     curId = id;
     mName.textContent = d.name || '';
     mask.classList.add('on');
     resetStamp();
-    if (els.del) els.del.hidden = !opts.fromMine;
     var rec = opts.fromMine ? mine[id] : null;
+    if (els.del) els.del.hidden = !rec;
     if (opts.readOnly && rec) {
       level = rec.lv >= 1 && rec.lv <= 6 ? rec.lv : 6;
       stamped = true;
@@ -1208,7 +1210,7 @@
     var i = -1;
     for (var k = 0; k < DATA.length; k++) if (DATA[k].id === curId) { i = k; break; }
     var n = DATA[(i + dir + DATA.length) % DATA.length];
-    if (n) open(n.id);
+    if (n) open(n.id, lastOpts);
   }
 
   $('close').addEventListener('click', close);
