@@ -105,8 +105,8 @@
   .btn.primary{background:var(--accent);color:var(--bg)}
   .btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line)}
   .stat{font-size:12px;color:var(--ink-2);padding:6px 2px 10px;letter-spacing:.03em}
-  .statrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .statrow .stat{flex:1;min-width:0}
+  .statrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 14px}
+  .statrow .stat{flex:1;min-width:0;padding:0}
   .regions{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none;margin:0 -2px}
   .regions::-webkit-scrollbar{display:none}
   .regions button{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;
@@ -168,11 +168,12 @@
   .mask.on{display:flex}
   .sheet{
     background:var(--bg);width:100%;max-width:600px;max-height:94vh;overflow:auto;
-    border-radius:22px 22px 0 0;padding:10px 14px calc(20px + env(safe-area-inset-bottom));position:relative;
+    border-radius:22px 22px 0 0;padding:0 14px calc(20px + env(safe-area-inset-bottom));position:relative;
     box-shadow:0 -12px 44px rgba(0,0,0,.18)
   }
-  .grabber{width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:2px auto 10px}
-  .close{position:absolute;top:2px;right:2px;width:44px;height:44px;padding:0;border:0;background:transparent;
+  .sheethead{position:relative;height:52px;display:flex;align-items:center;justify-content:center}
+  .grabber{width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:0}
+  .close{position:absolute;top:7px;right:0;width:44px;height:38px;padding:0;border:0;background:transparent;
     color:var(--ink-2);cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;
     -webkit-tap-highlight-color:transparent;opacity:.7}
   .close svg{width:17px;height:17px;display:block}
@@ -350,8 +351,10 @@
 
 <div class="mask" id="mask">
   <div class="sheet">
-    <div class="grabber"></div>
-    <button class="close" id="close" aria-label=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"></path></svg></button>
+    <div class="sheethead">
+      <div class="grabber"></div>
+      <button class="close" id="close" aria-label=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"></path></svg></button>
+    </div>
     <div class="paper" id="paper">
       <div class="idle" id="idle">
         <div class="icon"><img src="assets/icon-touch--hand.png" alt=""></div>
@@ -539,7 +542,7 @@
     nearRefresh:$('nearRefresh'),
     clearBtn:$('clearBtn'), tabs:$('tabs'), progFill:$('progFill'), progText:$('progText')
   };
-  var VERSION = '2.1.4', BUILD = '2026-10-08';
+  var VERSION = '2.1.5', BUILD = '2026-10-08';
 
   /* ---------------- 收藏记录 ---------------- */
   var mine = {};
