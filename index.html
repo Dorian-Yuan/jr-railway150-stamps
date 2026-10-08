@@ -107,7 +107,6 @@
   .stat{font-size:12px;color:var(--ink-2);padding:6px 2px 10px;letter-spacing:.03em}
   .statrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .statrow .stat{flex:1;min-width:0}
-  .btn.tiny{font-size:12px;padding:7px 12px;border-radius:10px}
   .regions{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none;margin:0 -2px}
   .regions::-webkit-scrollbar{display:none}
   .regions button{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;
@@ -173,8 +172,11 @@
     box-shadow:0 -12px 44px rgba(0,0,0,.18)
   }
   .grabber{width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:2px auto 10px}
-  .close{position:absolute;top:14px;right:12px;width:32px;height:32px;padding:0;border:0;border-radius:50%;
-    background:var(--surface-2);font-size:17px;line-height:1;cursor:pointer;color:var(--ink-2);z-index:2}
+  .close{position:absolute;top:2px;right:2px;width:44px;height:44px;padding:0;border:0;background:transparent;
+    color:var(--ink-2);cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;
+    -webkit-tap-highlight-color:transparent;opacity:.7}
+  .close svg{width:17px;height:17px;display:block}
+  .close:active{opacity:.4;transform:scale(.92)}
   .paper{
     position:relative;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;
     aspect-ratio:1/1;overflow:hidden;box-shadow:var(--shadow-1);
@@ -282,7 +284,7 @@
   <section id="pane-near" hidden>
     <div class="statrow">
       <div class="stat" id="nearStat"></div>
-      <button class="btn ghost tiny" id="nearRefresh" hidden></button>
+      <button class="iconbtn" id="nearRefresh" hidden></button>
     </div>
     <div class="empty" id="nearEmpty"></div>
     <div class="grid" id="nearGrid" hidden></div>
@@ -349,7 +351,7 @@
 <div class="mask" id="mask">
   <div class="sheet">
     <div class="grabber"></div>
-    <button class="close" id="close">✕</button>
+    <button class="close" id="close" aria-label=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"></path></svg></button>
     <div class="paper" id="paper">
       <div class="idle" id="idle">
         <div class="icon"><img src="assets/icon-touch--hand.png" alt=""></div>
@@ -405,6 +407,7 @@
       clearAsk:'确定清空全部收藏？',
       delHint:'删除这一枚',
       delAsk:'确定删除这一枚？',
+      closeHint:'关闭',
       statsTitle:'收集进度', statsCount:'共 {n} 枚',
       distTitle:'地区分布', regAll:'全部地区', recentTitle:'最近盖章',
       recentEmpty:'还没有记录',
@@ -446,6 +449,7 @@
       clearAsk:'記録をすべて消しますか',
       delHint:'この一枚を削除',
       delAsk:'この一枚を削除しますか',
+      closeHint:'閉じる',
       statsTitle:'収集の進み', statsCount:'全 {n} 枚',
       distTitle:'エリア分布', regAll:'すべてのエリア', recentTitle:'最近の押印',
       recentEmpty:'まだ記録がありません',
@@ -487,6 +491,7 @@
       clearAsk:'Clear all collected stamps?',
       delHint:'Delete this stamp',
       delAsk:'Delete this stamp?',
+      closeHint:'Close',
       statsTitle:'Progress', statsCount:'of {n}',
       distTitle:'By region', regAll:'All regions', recentTitle:'Recent',
       recentEmpty:'Nothing yet',
@@ -527,13 +532,14 @@
   var els = {
     title:$('i18nTitle'), sub:$('i18nSub'), tip:$('i18nTip'),
     open:$('mOpen'), del:$('mDelete'), inkbar:$('inkbar'),
+    close:$('close'),
     prev:$('prev'), next:$('next'), reset:$('mReset'), q:$('q'), stat:$('stat'),
     randomBtn:$('randomBtn'), mineStat:$('mineStat'), mineEmpty:$('mineEmpty'),
     nearStat:$('nearStat'), nearBtn:$('nearBtn'), nearEmpty:$('nearEmpty'),
     nearRefresh:$('nearRefresh'),
     clearBtn:$('clearBtn'), tabs:$('tabs'), progFill:$('progFill'), progText:$('progText')
   };
-  var VERSION = '2.1.3', BUILD = '2026-10-07';
+  var VERSION = '2.1.4', BUILD = '2026-10-08';
 
   /* ---------------- 收藏记录 ---------------- */
   var mine = {};
@@ -550,6 +556,9 @@
     els.open.title = T('openHint');
     els.reset.title = T('restamp');
     if (els.del) els.del.title = T('delHint');
+    if (els.close) els.close.setAttribute('aria-label', T('closeHint'));
+    if (els.nearRefresh) { els.nearRefresh.title = T('nearRefresh');
+      els.nearRefresh.setAttribute('aria-label', T('nearRefresh')); }
     els.prev.textContent = T('prev');
     els.next.textContent = T('next');
     els.q.placeholder = T('ph');
@@ -879,7 +888,8 @@
     actions.hidden = true;
     els.nearBtn.textContent = T('nearRefresh');
     els.nearStat.textContent = fmt('nearStat', { m: nearList.length });
-    if (els.nearRefresh) { els.nearRefresh.hidden = false; els.nearRefresh.textContent = T('nearRefresh'); }
+    if (els.nearRefresh) { els.nearRefresh.hidden = false; els.nearRefresh.title = T('nearRefresh');
+      els.nearRefresh.setAttribute('aria-label', T('nearRefresh')); }
     var frag = document.createDocumentFragment();
     nearList.forEach(function(it){ frag.appendChild(makeCard(it.d, { dist: fmtDist(it.km) })); });
     gridEl.appendChild(frag);
@@ -1238,11 +1248,13 @@
   els.prev.addEventListener('click', function(){ step(-1); });
   els.next.addEventListener('click', function(){ step(1); });
   var OPEN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"></path><path d="M20 4l-8.6 8.6"></path><path d="M18.5 14.5V19a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2H10"></path></svg>';
+  var LOCATE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><circle cx="12" cy="12" r="7.4"></circle><path d="M12 1.6v3.2M12 19.2v3.2M1.6 12h3.2M19.2 12h3.2"></path></svg>';
   var DELETE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"></path><path d="M6.5 7l.8 12a2 2 0 0 0 2 1.8h5.4a2 2 0 0 0 2-1.8l.8-12"></path><path d="M10 11v6M14 11v6"></path></svg>';
   var RESET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.49-6.01"></path><path d="M20.5 3.5v5h-5"></path></svg>';
   els.open.innerHTML = OPEN_ICON;
   els.reset.innerHTML = RESET_ICON;
   if (els.del) els.del.innerHTML = DELETE_ICON;
+  if (els.nearRefresh) els.nearRefresh.innerHTML = LOCATE_ICON;
   if (els.del) els.del.addEventListener('click', function(e){ e.stopPropagation(); deleteStamp(); });
   els.open.addEventListener('click', function(e){
     if (!curUrl) return;
