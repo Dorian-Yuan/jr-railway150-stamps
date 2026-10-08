@@ -105,6 +105,9 @@
   .btn.primary{background:var(--accent);color:var(--bg)}
   .btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line)}
   .stat{font-size:12px;color:var(--ink-2);padding:6px 2px 10px;letter-spacing:.03em}
+  .statrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .statrow .stat{flex:1;min-width:0}
+  .btn.tiny{font-size:12px;padding:7px 12px;border-radius:10px}
   .regions{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none;margin:0 -2px}
   .regions::-webkit-scrollbar{display:none}
   .regions button{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;
@@ -277,7 +280,10 @@
   </section>
 
   <section id="pane-near" hidden>
-    <div class="stat" id="nearStat"></div>
+    <div class="statrow">
+      <div class="stat" id="nearStat"></div>
+      <button class="btn ghost tiny" id="nearRefresh" hidden></button>
+    </div>
     <div class="empty" id="nearEmpty"></div>
     <div class="grid" id="nearGrid" hidden></div>
     <div class="row" id="nearActions" style="margin-top:14px" hidden>
@@ -385,7 +391,7 @@
   /* ---------------- 国际化 ---------------- */
   var I18N = {
     zh: {
-      title:'MY JAPAN RAILWAY 150th ・ 駅スタンプ',
+      title:'我的日本铁道 150 周年 ・ 站印章',
       sub:'JR站点印章归档',
       tabAll:'全部', tabNear:'附近', tabMine:'我的', tabStats:'统计',
       ph:'搜索　编号・站名・罗马字',
@@ -402,7 +408,7 @@
       statsTitle:'收集进度', statsCount:'共 {n} 枚',
       distTitle:'地区分布', regAll:'全部地区', recentTitle:'最近盖章',
       recentEmpty:'还没有记录',
-      nearIdle:'开启定位，找出离你最近的 16 个车站。',
+      nearIdle:'开启定位，找出离你最近的 15 个车站。',
       nearBtn:'开始定位', nearRetry:'重试', nearRefresh:'更新位置',
       nearLoading:'正在定位…',
       nearErr:'拿不到你的位置。请确认已允许定位权限，或在 Safari 里打开本页。',
@@ -443,7 +449,7 @@
       statsTitle:'収集の進み', statsCount:'全 {n} 枚',
       distTitle:'エリア分布', regAll:'すべてのエリア', recentTitle:'最近の押印',
       recentEmpty:'まだ記録がありません',
-      nearIdle:'位置情報を許可すると、近くの駅 16 件を表示します。',
+      nearIdle:'位置情報を許可すると、近くの駅 15 件を表示します。',
       nearBtn:'位置情報を使う', nearRetry:'再試行', nearRefresh:'位置を更新',
       nearLoading:'取得中…',
       nearErr:'位置情報を取得できませんでした。ブラウザの許可設定をご確認ください。',
@@ -484,7 +490,7 @@
       statsTitle:'Progress', statsCount:'of {n}',
       distTitle:'By region', regAll:'All regions', recentTitle:'Recent',
       recentEmpty:'Nothing yet',
-      nearIdle:'Allow location access to see the 16 nearest stations.',
+      nearIdle:'Allow location access to see the 15 nearest stations.',
       nearBtn:'Use my location', nearRetry:'Retry', nearRefresh:'Update location',
       nearLoading:'Locating…',
       nearErr:'Could not get your location. Check the browser permission, or open this page in Safari.',
@@ -524,9 +530,10 @@
     prev:$('prev'), next:$('next'), reset:$('mReset'), q:$('q'), stat:$('stat'),
     randomBtn:$('randomBtn'), mineStat:$('mineStat'), mineEmpty:$('mineEmpty'),
     nearStat:$('nearStat'), nearBtn:$('nearBtn'), nearEmpty:$('nearEmpty'),
+    nearRefresh:$('nearRefresh'),
     clearBtn:$('clearBtn'), tabs:$('tabs'), progFill:$('progFill'), progText:$('progText')
   };
-  var VERSION = '2.1.2', BUILD = '2026-10-07';
+  var VERSION = '2.1.3', BUILD = '2026-10-07';
 
   /* ---------------- 收藏记录 ---------------- */
   var mine = {};
@@ -572,6 +579,8 @@
     renderAll();
     renderMine();
     renderStats();
+    renderNear();
+    document.title = T('title');
   }
 
   var langs = $('langs');
@@ -812,9 +821,9 @@
       arr.push({ d: d, km: haversine(geo.lat, geo.lng, d.lat, d.lng) });
     });
     arr.sort(function(a, b){ return a.km - b.km; });
-    // 同一车站有多张图案时只取最近的那一张，保证是 16 个不同的站
+    // 同一车站有多张图案时只取最近的那一张，保证是 15 个不同的站
     var seen = {}, out = [];
-    for (var i = 0; i < arr.length && out.length < 16; i++) {
+    for (var i = 0; i < arr.length && out.length < 15; i++) {
       var key = arr[i].d.name || ('#' + arr[i].d.id);
       if (seen[key]) continue;
       seen[key] = 1;
@@ -843,6 +852,7 @@
       gridEl.hidden = true;
       emptyEl.hidden = false;
       els.nearStat.textContent = '';
+      if (els.nearRefresh) els.nearRefresh.hidden = true;
       if (nearState === 'loading') {
         emptyEl.textContent = T('nearLoading');
         actions.hidden = true;
@@ -861,18 +871,21 @@
       actions.hidden = false;
       els.nearBtn.textContent = T('nearRefresh');
       els.nearStat.textContent = '';
+      if (els.nearRefresh) els.nearRefresh.hidden = true;
       return;
     }
     gridEl.hidden = false;
     emptyEl.hidden = true;
-    actions.hidden = false;
+    actions.hidden = true;
     els.nearBtn.textContent = T('nearRefresh');
     els.nearStat.textContent = fmt('nearStat', { m: nearList.length });
+    if (els.nearRefresh) { els.nearRefresh.hidden = false; els.nearRefresh.textContent = T('nearRefresh'); }
     var frag = document.createDocumentFragment();
     nearList.forEach(function(it){ frag.appendChild(makeCard(it.d, { dist: fmtDist(it.km) })); });
     gridEl.appendChild(frag);
   }
   els.nearBtn.addEventListener('click', locate);
+  if (els.nearRefresh) els.nearRefresh.addEventListener('click', locate);
 
   /* ---------------- 我的 ---------------- */
   var mineGroups = $('mineGroups'), mineRegionsBox = $('mineRegions');
